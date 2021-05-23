@@ -1,0 +1,1 @@
+time command take user + sys to evaluate algo time
