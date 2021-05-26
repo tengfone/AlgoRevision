@@ -77,7 +77,19 @@ class LinkedList():
                 previous.next_node = current.next_node
             else:
                 previous = current
-                current = current.next_node                
+                current = current.next_node
+
+    def reverse(self):
+        # https://www.youtube.com/watch?v=XDO6I8jxHtA
+        prev = None
+        current = self.head
+
+        while current:
+            temp = current
+            current = current.next_node
+            temp.next_node = prev
+            prev = temp
+            print(prev)
 
     def __repr__(self) -> str:
         nodes = []
@@ -120,4 +132,11 @@ n.addBack(1)
 n.addBack(2)
 n.addBack(3)
 n.remove(3)
+print(repr(n))
+n = LinkedList()
+print("\nReverse 123 to 321")
+n.addFront(1)
+n.addFront(2)
+n.addFront(3)
+n.reverse()
 print(repr(n))
