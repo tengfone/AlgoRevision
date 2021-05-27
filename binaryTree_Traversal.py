@@ -1,3 +1,64 @@
+## NOTE: Binary Tree != Binarary Search Tree. BT has no order 
+
+class Stack(object):
+    def __init__(self) -> None:
+        super().__init__()
+        self.items = []
+    
+    def push(self,item):
+        self.items.append(item)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.items.pop()
+
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    def peek(self):
+        if not self.is_empty():
+            return self.items[-1]
+
+    def size(self):
+        return len(self.items)
+
+    def __len__(self):
+        return self.size()
+
+class Queue(object):
+    def __init__(self) -> None:
+        super().__init__()
+        self.items = []
+
+    def enqueue(self,item):
+        """
+        Adding items in queue
+        """
+        self.items.insert(0,item)
+
+    def dequeue(self):
+        """
+        Remove items in queue
+        """
+        if not self.is_empty():
+            return self.items.pop()
+        
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def peek(self):
+        """
+        See first item
+        """
+        if not self.is_empty():
+            return self.items[-1].value
+
+    def __len__(self):
+        return self.size()
+
+    def size(self):
+        return len(self.items)
+
 class Node(object):
     def __init__(self, value) -> None:
         self.left = None
@@ -22,6 +83,14 @@ class BinaryTree(object):
             return self.postorderR_print(tree.root,"")
         elif traversal_type == "postorderI":
             return self.postorderI_print(tree.root)
+        elif traversal_type == "bfs":
+            return self.level_order_print(tree.root)
+        elif traversal_type == "reverseLevelOrder":
+            return self.reverse_level_order_print(tree.root)
+        elif traversal_type == "HeightOfTree":
+            return self.heightOfTree_print(tree.root)
+        elif traversal_type == "sizeOfTree":
+            return self.sizeOfTree_print(tree.root)
         else:
             print("Traversal Type Not Supported")
             return False
@@ -102,7 +171,103 @@ class BinaryTree(object):
         
         return result
 
+    def level_order_print(self,start):
+        """
+        AKA BFS BREADTH FIRST SEARCH. Uses QUEUE,FIRST IN FIRST OUT FIFO
+        https://www.youtube.com/watch?v=aM-oswPn19o&list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL&index=2
+        """
+        if start is None:
+            return
+
+        queue = Queue()
+        queue.enqueue(start)
+
+        traversal = ""
+        while len(queue) > 0:
+            traversal += str(queue.peek()) + "-"
+            node = queue.dequeue()
+
+            if node.left:
+                queue.enqueue(node.left)
+            if node.right:
+                queue.enqueue(node.right)
+
+        return traversal
+
+    def reverse_level_order_print(self,start):
+        """
+        Reverse level order (NOT BFS/DFS). Use a queue AND stack
+        https://www.youtube.com/watch?v=bK6lijUbvms&list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL&index=3
+        """
+        if start is None:
+            return
+        
+        queue = Queue()
+        stack = Stack()
+
+        queue.enqueue(start)
+
+        traversal = ""
+
+        while len(queue) > 0:
+            node = queue.dequeue()
+            stack.push(node)
+
+            if node.right:
+                queue.enqueue(node.right)
+            if node.left:
+                queue.enqueue(node.left)
+        
+        while len(stack) > 0:
+            node = stack.pop() # Reverse
+            traversal += str(node.value) + "-"
+        
+        return traversal
+
+    def heightOfTree_print(self, node):
+        """
+        Find Height Of Tree 
+        https://www.youtube.com/watch?v=BDw8zzy3QiY&list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL&index=4
+        """
+        if node is None:
+            return -1
+        
+        left_height = self.heightOfTree_print(node.left)
+        right_height = self.heightOfTree_print(node.right)
+
+        return 1 + max(left_height,right_height)
+    
+    def sizeOfTree_print(self,node):
+        """
+        Find Size Of Tree (iteratively//recursive)
+        https://www.youtube.com/watch?v=VbruT_rwfzQ&list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL&index=5
+        """
+
+        ## Iteratively
+        # if self.root == None:
+        #     return 0
+        
+        # stack = Stack()
+        # stack.push(self.root)
+        # counter = 1
+        # while stack:
+        #     node = stack.pop()
+        #     if node.left:
+        #         counter += 1 
+        #         stack.push(node.left)
+        #     if node.right:
+        #         counter += 1
+        #         stack.push(node.right)
+        # return counter
+
+        ## Recursively
+        if node is None:
+            return 0
+        return 1 + self.sizeOfTree_print(node.left) + self.sizeOfTree_print(node.right)
+
+######################################################################
 ############################ DRIVER CODES ############################
+######################################################################
 
 ## Main Youtube Link: https://www.youtube.com/watch?v=6oL-0TdVy28&list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL&index=1
 
@@ -168,3 +333,55 @@ print(recursive_postorder)
 print("Iterative PostOrder")
 iterative_postorder = tree.print_tree("postorderI")
 print(iterative_postorder)
+
+#     1
+#    / \
+#   2   3
+#  /\   /\
+# 4  5  6 7
+#          \
+#           8
+## LEVEL_ORDER: [1,2,3,4,5,6,7,8]
+
+print("Level Order/BFS")
+bfs = tree.print_tree("bfs")
+print(bfs)
+
+#     1
+#    / \
+#   2   3
+#  /\   /\
+# 4  5  6 7
+#          \
+#           8
+## REVERSE_LEVEL_ORDER: [8,4,5,6,7,2,3,1]
+
+print("Reverse Level Order")
+reverseLevelOrder = tree.print_tree("reverseLevelOrder")
+print(reverseLevelOrder)
+
+#     1
+#    / \
+#   2   3
+#  /\   /\
+# 4  5  6 7
+#          \
+#           8
+## Height Of Tree: 3
+
+print("Height Of Tree")
+treeHeight = tree.print_tree("HeightOfTree")
+print(treeHeight)
+
+#     1
+#    / \
+#   2   3
+#  /\   /\
+# 4  5  6 7
+#          \
+#           8
+## Size Of Tree: 8
+
+print("Size Of Tree")
+treeSize = tree.print_tree("sizeOfTree")
+print(treeSize)
