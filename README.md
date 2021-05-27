@@ -7,3 +7,4 @@ Resources:
 - https://runestone.academy/runestone/books/published/pythonds/index.html (Interactive Textbook)
 - https://www.youtube.com/playlist?list=PL5tcWHG-UPH2fmYC6kgey1RIxP2iK9EEL (Binary Tree)
 - https://www.youtube.com/watch?v=s2Yyk3qdy3o (Solve Almost Every BT Problems)
+- https://www.youtube.com/watch?v=lFq5mYUWEBk&list=PLeo1K3hjS3uu_n_a__MI_KktGTLYopZ12&index=11 (BST)
